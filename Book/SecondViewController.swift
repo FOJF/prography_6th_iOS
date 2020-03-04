@@ -8,10 +8,22 @@
 
 import UIKit
 
+extension String {
+    func maxLength(length: Int) -> String {
+        var str = self
+        let nsString = str as NSString
+        if nsString.length >= length {
+            str = nsString.substring(with: NSRange(location: 0, length: nsString.length > length ? length : nsString.length))
+        }
+        return str
+    }
+}
+
 class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var booksTableView: UITableView!
     @IBOutlet weak var tableViewIndicator: UIActivityIndicatorView!
+  
     let cellIdentifier: String = "bookCell"
     var books: [Book] = []
     var bookName: String?
@@ -23,8 +35,11 @@ class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let cell: UITableViewCell = self.booksTableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath)
         
         let book: Book = self.books[indexPath.row]
-        
-        cell.textLabel?.text = book.title
+        if book.title!.count > 35 {
+        cell.textLabel?.text = (book.title?.maxLength(length: 35))! + "..."
+        } else {
+            cell.textLabel?.text = book.title
+        }
         cell.detailTextLabel?.text = book.price
         
         return cell
@@ -61,7 +76,6 @@ class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDa
             do {
                 let bookResponse: BookResponse = try JSONDecoder().decode(BookResponse.self, from: data)
                 
-                //self.books = bookResponse.books
                 if self.check != bookResponse.books.count {
                     for i in 0 ..< bookResponse.books.count {
                         self.books.append(bookResponse.books[i])
@@ -92,14 +106,9 @@ class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         let cell = sender as! UITableViewCell
         let indexPath = booksTableView.indexPath(for: cell)
-        nextViewController.bookTitle = books[(indexPath?.row)!].title//내가누른 cell의 text
-        nextViewController.bookPrice = books[(indexPath?.row)!].price//내가누른 cell의 row값
+        nextViewController.bookTitle = books[(indexPath?.row)!].title
+        nextViewController.bookPrice = books[(indexPath?.row)!].price
         nextViewController.bookSubTitle = books[(indexPath?.row)!].subtitle
         nextViewController.bookImageURL = books[(indexPath?.row)!].image
-        
-        
     }
-    
-    
-    
 }

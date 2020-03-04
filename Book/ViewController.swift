@@ -9,8 +9,6 @@
 import UIKit
 
 class ViewController: UIViewController, UITextFieldDelegate{
-    
-    
     @IBOutlet weak var titleTextField: UITextField! {
         didSet {
            titleTextField.delegate = self
@@ -33,10 +31,7 @@ class ViewController: UIViewController, UITextFieldDelegate{
         nextButton.layer.shadowColor = UIColor.black.cgColor
         nextButton.layer.shadowOffset = CGSize(width: 0.0, height: 5.0)
         titleTextField.layer.cornerRadius = 10
-    }    
-    
-    
-    
+    }
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -50,6 +45,4 @@ class ViewController: UIViewController, UITextFieldDelegate{
             nextViewController.bookName = self.titleTextField.text
         }
     }
-    
-    
 }
