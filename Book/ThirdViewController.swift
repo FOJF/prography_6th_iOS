@@ -21,6 +21,7 @@ class ThirdViewController: UIViewController {
     var bookSubTitle: String?
     var bookImageURL: String?
     
+    //test
     
     override func viewDidLoad() {
         super.viewDidLoad()
