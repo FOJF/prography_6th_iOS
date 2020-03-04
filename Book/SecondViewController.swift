@@ -35,8 +35,8 @@ class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let cell: UITableViewCell = self.booksTableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath)
         
         let book: Book = self.books[indexPath.row]
-        if book.title!.count > 35 {
-        cell.textLabel?.text = (book.title?.maxLength(length: 35))! + "..."
+        if book.title!.count > 32 {
+        cell.textLabel?.text = (book.title?.maxLength(length: 32))! + "..."
         } else {
             cell.textLabel?.text = book.title
         }
