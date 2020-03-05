@@ -23,7 +23,7 @@ class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     @IBOutlet weak var booksTableView: UITableView!
     @IBOutlet weak var tableViewIndicator: UIActivityIndicatorView!
-  
+    
     let cellIdentifier: String = "bookCell"
     var books: [Book] = []
     var bookName: String?
@@ -36,7 +36,7 @@ class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         let book: Book = self.books[indexPath.row]
         if book.title!.count > 32 {
-        cell.textLabel?.text = (book.title?.maxLength(length: 32))! + "..."
+            cell.textLabel?.text = (book.title?.maxLength(length: 32))! + "..."
         } else {
             cell.textLabel?.text = book.title
         }
@@ -61,13 +61,16 @@ class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: -ViewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        guard let url: URL = URL(string: "https://api.itbook.store/1.0/search/\(bookName!)") else {return}
+        var apiURL: URL = URL(string: "https://api.itbook.store/1.0/search/")!
+        apiURL.appendPathComponent(bookName!)
+        guard let url: URL = apiURL else {return}
+        print(url)
         let session: URLSession = URLSession(configuration: .default)
         let dataTask: URLSessionDataTask = session.dataTask(with: url) { (data: Data?, response: URLResponse?, error: Error?) in
             
             if let error = error {
                 print(error.localizedDescription)
+                self.tableViewIndicator.stopAnimating()
                 return
             }
             
@@ -78,7 +81,9 @@ class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 
                 if self.check != bookResponse.books.count {
                     for i in 0 ..< bookResponse.books.count {
-                        self.books.append(bookResponse.books[i])
+                        DispatchQueue.main.async {
+                            self.books.append(bookResponse.books[i])
+                        }
                         self.check += 1
                     }
                 }
@@ -90,6 +95,9 @@ class SecondViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 
             } catch(let err) {
                 print(err.localizedDescription)
+                DispatchQueue.main.async {
+                    self.tableViewIndicator.stopAnimating()
+                }
             }
         }
         dataTask.resume()
