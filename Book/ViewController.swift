@@ -11,7 +11,7 @@ import UIKit
 class ViewController: UIViewController, UITextFieldDelegate{
     @IBOutlet weak var titleTextField: UITextField! {
         didSet {
-           titleTextField.delegate = self
+            titleTextField.delegate = self
         }
     }
     @IBOutlet var nextButton: UIButton!
@@ -24,6 +24,8 @@ class ViewController: UIViewController, UITextFieldDelegate{
         return true
     }
     
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -31,6 +33,10 @@ class ViewController: UIViewController, UITextFieldDelegate{
         nextButton.layer.shadowColor = UIColor.black.cgColor
         nextButton.layer.shadowOffset = CGSize(width: 0.0, height: 5.0)
         titleTextField.layer.cornerRadius = 10
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {//화면 세로 고정
+       appDelegate.shouldSupportAllOrientation = false
     }
     // MARK: - Navigation
     
